@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Focus Mode Active</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: var(--background);
+            color: var(--text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .message {
+            text-align: center;
+            max-width: 600px;
+        }
+        .age {
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+        :root {
+            --background: #ffffff;
+            --text: #000000;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background: #121212;
+                --text: #ffffff;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="message">
+        <h1>Focus Mode is Active!</h1>
+        <p>Please stay focused and avoid distractions.</p>
+        <div class="age" id="currentAge">Your Age: Calculating...</div>
+    </div>
+    <script>
+        // Fetch and display the current age from storage
+        chrome.storage.local.get(['age'], function(result) {
+            const ageElement = document.getElementById('currentAge');
+            if(result.age) {
+                ageElement.textContent = `Your Age: ${result.age.toFixed(8)} years`;
+            } else {
+                ageElement.textContent = 'Your Age: Not set';
+            }
+        });
+    </script>
+</body>
+</html>

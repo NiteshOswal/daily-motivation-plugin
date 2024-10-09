@@ -3,7 +3,12 @@
     "name": "Daily Motivation",
     "version": "1.0",
     "description": "Displays your age and your cake.",
-    "permissions": ["storage"],
+    "permissions": [
+        "storage",
+        "tabs",
+        "webRequest",
+        "declarativeContent"
+    ],
     "background": {
         "service_worker": "background.js"
     },
@@ -18,7 +23,7 @@
     ],
     "web_accessible_resources": [
         {
-            "resources": ["animation.gif"],
+            "resources": ["animation.gif", "focusblocked.html"],
             "matches": ["<all_urls>"]
         }
     ]

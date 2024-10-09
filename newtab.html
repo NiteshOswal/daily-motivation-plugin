@@ -1,14 +1,224 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Daily Motivation</title>
-    <script src="content.js"></script>
+    <style>
+        :root {
+            --background-light: #f0f0f0;
+            --background-dark: #1e1e1e;
+            --text-light: #000000;
+            --text-dark: #ffffff;
+            --accent: #4CAF50;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background: var(--background-dark);
+                --text: var(--text-dark);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            :root {
+                --background: var(--background-light);
+                --text: var(--text-light);
+            }
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .left, .right {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .left {
+            border-right: 1px solid #ccc;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        #dobSection, #appSection {
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        #ageDisplay {
+            font-size: 2em;
+            margin-top: 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* To-Do List Styles */
+        .todo-container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .todo-input {
+            width: 80%;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .todo-button {
+            padding: 10px 15px;
+            font-size: 1em;
+            margin-left: 10px;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .todo-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .todo-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: rgba(76, 175, 80, 0.1);
+            margin-bottom: 10px;
+            border-radius: 4px;
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .todo-item button {
+            background-color: red;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Focus Mode Button */
+        .focus-button {
+            display: block;
+            margin: 30px auto 0;
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .focus-button.active {
+            background-color: #e64a19;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 80%;
+            height: 20px;
+            background-color: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 30px auto 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--accent);
+            transition: width 0.5s ease-in-out;
+        }
+
+        /* Countdown Timer */
+        .countdown {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+
+        /* Dark/Light Mode Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--accent);
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+    </style>
 </head>
 <body>
-    <h1>Welcome to Daily Motivation!</h1>
-    <input type="date" id="dob" />
-    <button id="submit">Calculate Age</button>
-    <div id="result"></div>
-    <img src="animation.gif" alt="Animation" />
+    <button class="theme-toggle" id="themeToggle">🌓</button>
+    <h1>Daily Motivation</h1>
+    
+    <div id="dobSection">
+        <h2>Enter Your Date of Birth</h2>
+        <input type="date" id="dob" />
+        <button id="submit">Calculate Age</button>
+    </div>
+    
+    <div id="appSection" style="display: none;">
+        <div class="container">
+            <div class="left">
+                <div id="ageDisplay">Your Age: Calculating...</div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <div class="countdown" id="countdownTimer"></div>
+                <button class="focus-button" id="focusButton">Focus Mode</button>
+            </div>
+            <div class="right">
+                <div class="todo-container">
+                    <h2>To-Do List</h2>
+                    <input type="text" id="todoInput" class="todo-input" placeholder="Add a new task" />
+                    <button id="addTodo" class="todo-button">Add</button>
+                    <ul id="todoList" class="todo-list"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="content.js"></script>
 </body>
 </html>
