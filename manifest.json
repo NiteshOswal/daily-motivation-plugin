@@ -1,0 +1,25 @@
+{
+    "manifest_version": 3,
+    "name": "Daily Motivation",
+    "version": "1.0",
+    "description": "Displays your age and your cake.",
+    "permissions": ["storage"],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "chrome_url_overrides": {
+        "newtab": "newtab.html"
+    },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"]
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": ["animation.gif"],
+            "matches": ["<all_urls>"]
+        }
+    ]
+}
